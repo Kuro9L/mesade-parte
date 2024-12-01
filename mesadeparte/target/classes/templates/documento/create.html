@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="es">
+
+<head th:replace="/componentes/head :: head">
+
+</head>
+<Style>
+    /* Importing Google font - Poppins */
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+    /* Estilo para el botón "Página Principal" */
+    /* Estilo para el contenedor del botón "Página Principal" */
+    .btn-pagina-principal-container {
+        text-align: right;
+        /* Alinea el contenido (botón) a la derecha */
+        margin-bottom: 20px;
+        /* Espacio inferior para separar el botón del contenido siguiente */
+    }
+
+    .btn-pagina-principal:hover {
+        background-color: #0056b3;
+        /* Color de fondo al pasar el ratón */
+        border-color: #0056b3;
+        /* Cambia el color del borde al pasar el ratón */
+        cursor: pointer;
+        /* Cambia el cursor */
+    }
+
+    /* Estilo para el título "Registrar Documento" */
+    h3 {
+        font-size: 40px;
+        /* Tamaño de fuente */
+        color: #333;
+        /* Color de texto */
+        font-weight: bold;
+        /* Negrita */
+        text-align: center;
+        /* Centrado */
+        margin-top: 20px;
+        /* Espacio arriba */
+        margin-bottom: 30px;
+        /* Espacio abajo */
+    }
+
+    /* Estilo general para el formulario */
+    .custom-form-container {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-left: 280px;
+        margin-right: 280px;
+    }
+
+    .custom-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .custom-title-2 {
+        margin-bottom: 20px;
+        margin-top: 40px;
+    }
+
+    .custom-label {
+        font-size: 16px;
+        color: #555;
+        user-select: none;
+    }
+
+    .custom-input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    .custom-input:focus {
+        border-color: #5b9bd5;
+        outline: none;
+    }
+
+    .custom-btn {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: background-color 0.3s;
+        display: block;
+        /* Hace que el botón se comporte como un bloque */
+        margin-left: auto;
+        /* Centra el botón en el contenedor */
+        margin-right: auto;
+        /* Centra el botón en el contenedor */
+    }
+
+
+    .custom-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-pagina-principal {
+        background-color: #007bff;
+        /* Color de fondo azul */
+        color: white;
+        /* Texto blanco */
+        font-size: 16px;
+        /* Tamaño de fuente */
+        padding: 10px 20px;
+        /* Espaciado interno */
+        border: 2px solid #007bff;
+        /* Borde del mismo color que el fondo */
+        border-radius: 15px;
+        /* Bordes redondeados */
+        text-align: center;
+        /* Alineación del texto */
+        display: inline-flex;
+        /* Cambiado a flexbox para facilitar el alineado */
+        align-items: center;
+        /* Centra verticalmente los elementos */
+        text-decoration: none;
+        /* Sin subrayado */
+        transition: background-color 0.3s, border-color 0.3s;
+        /* Transición suave al cambiar de color */
+    }
+
+    .material-symbols-outlined {
+        font-size: 24px;
+        /* Tamaño del ícono */
+        margin-right: 8px;
+        /* Espacio entre el ícono y el texto */
+    }
+</Style>
+
+<body>
+    <nav></nav>
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto custom-form-container">
+                <!-- Botón de Página Principal -->
+                <div class="row mb-3">
+                    <div class="btn-pagina-principal-container">
+                        <a href="/" class="btn btn-pagina-principal">
+                            <span class="material-symbols-outlined">home</span> Página Principal
+                        </a>
+                    </div>
+                </div>
+                <!-- Texto: Registrar Documento -->
+                <div class="row mb-3">
+                    <div class="col-sm-12 text-center">
+                        <h3>Registrar Documento</h3>
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <h2 class="text-center custom-title">1. Documento</h2>
+                <form method="post" th:object="${dto}" class="custom-form" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label custom-label">Tipo Documento</label>
+                        <div class="col-sm-8">
+                            <select class="custom-input" th:field="${dto.tipodoc}">
+                                <option value="1">Solicitud</option>
+                                <option value="2">Carta</option>
+                                <option value="3">Oficio</option>
+                                <option value="4">Oficio Multiple</option>
+                                <option value="5">Otros</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label custom-label">Folios</label>
+                        <div class="col-sm-8">
+                            <input class="custom-input" th:field="${dto.folio}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label custom-label">Asunto</label>
+                        <div class="col-sm-8">
+                            <input class="custom-input" th:field="${dto.asunto}">
+                        </div>
+                    </div>
+
+                    <label for="archivo" class="custom-label">Archivo.PDF (Max. 20MB)</label>
+                    <input type="file" id="archivo" th:field="${dto.archivo}" name="archivo" class="custom-input"
+                        required>
+
+                    <!-- Nuevo Apartado: Remitente -->
+                    <h2 class="text-center custom-title-2 mt-5">2. Remitente</h2>
+                    <!-- Nombre Remitente -->
+                    <label class="col-sm-4 col-form-label custom-label">Tipo Persona</label>
+                    <div class="col-sm-8">
+                        <select class="custom-input" th:field="${dto.tipopersona}">
+                            <option value="1">Natural</option>
+                            <option value="2">Juridica</option>
+                        </select>
+                    </div>
+                    <!-- Dirección Remitente -->
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label custom-label">Numero de Documento</label>
+                        <div class="col-sm-8">
+                            <input class="custom-input" th:field="${dto.numdoc}">
+                        </div>
+                    </div>
+                    <!-- Teléfono Remitente -->
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label custom-label">Nombres del Remitente</label>
+                        <div class="col-sm-8">
+                            <input class="custom-input" th:field="${dto.nombres}">
+                        </div>
+                    </div>
+                    <!-- Correo Remitente -->
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label custom-label">Correo (Opcional)</label>
+                        <div class="col-sm-8">
+                            <input class="custom-input" th:field="${dto.correo}">
+                        </div>
+                    </div>
+
+                    <!-- Teléfono Remitente -->
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label custom-label">Telefono (Opcional)</label>
+                        <div class="col-sm-8">
+                            <input class="custom-input" th:field="${dto.telefono}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="offset-sm-4 col-sm-4 d-grid mb-3">
+                            <button type="submit" class="custom-btn">Grabar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de éxito -->
+    <div id="modalExito" class="modal">
+        <div class="modal-content">
+            <span class="material-symbols-outlined">check_circle</span> <!-- Ícono de éxito -->
+            <h2>Registro de Documento Exitoso</h2>
+        </div>
+    </div>
+
+    <!-- Modal de error -->
+    <div id="modalError" class="modal">
+        <div class="modal-content">
+            <span class="material-symbols-outlined">error</span> <!-- Ícono de error -->
+            <h2>Documento No Guardado</h2>
+        </div>
+    </div>
+    <style>
+        /* Estilo básico del modal */
+        .modal {
+            display: none;
+            /* El modal estará oculto inicialmente */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Fondo semitransparente */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .modal-content span {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .modal h2 {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+    <script>
+        // Verificar si la página ha cargado
+        window.onload = function() {
+            // Obtener los parámetros de la URL (éxito o error)
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            const error = urlParams.get('error');
+            
+            // Mostrar el modal según el parámetro en la URL
+            if (success === 'true') {
+                document.getElementById('modalExito').style.display = 'flex'; // Mostrar el modal de éxito
+                setTimeout(function() {
+                    window.location.href = "/"; // Redirigir después de 3 segundos
+                }, 3000); // Espera 3 segundos antes de redirigir
+            } else if (error === 'true') {
+                document.getElementById('modalError').style.display = 'flex'; // Mostrar el modal de error
+                setTimeout(function() {
+                    window.location.href = "/create"; // Redirigir a la página de creación en caso de error
+                }, 3000); // Espera 3 segundos antes de redirigir
+            }
+        };
+    </script>
+    
+
+</body>
+</body>
+
+
+</html>

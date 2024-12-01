@@ -1,0 +1,36 @@
+<div th:fragment="seguimiento">
+    <h1 class="text-center mb-3">Lista de Expedientes</h1>
+    <div class="main-container">
+        <div class="button-container" role="group" aria-label="Action Buttons">
+            <a href="/documento/create">
+                <button class="button -blue">
+                    <span class="material-symbols-outlined" style="margin-right: 8px;">folder_open</span>
+                    Nuevo Expediente
+                </button>
+            </a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>FECHA</th>
+                    <th>DESCRIPCION</th>
+                    <th>ARCHIVO</th>
+                    <th>USUARIO</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr th:each="seguimineto: ${seguimineto}">
+                    <td>
+                        <span class="material-symbols-outlined">folder_open</span>
+                    </td>
+                    <td th:text="${seguimineto.fecha}"></td>
+                    <td th:text="${seguimineto.descripcion}"></td>
+                    <td th:text="${seguimineto.archivo}"></td>
+                    <td th:text="${seguimineto.usuario}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

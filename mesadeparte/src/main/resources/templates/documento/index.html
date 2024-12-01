@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="/componentes/head :: head">
+</head>
+
+<body>
+    <div th:replace="/componentes/sidebar :: sidebar"></div>
+    <div class="container my-3" style="user-select: none;">
+
+        <h1 class="text-center mb-3">Lista de Expedientes</h1>
+        <div class="main-container">
+            <div class="button-container" role="group" aria-label="Action Buttons">
+                <a href="/documento/create">
+                    <button class="button -blue">
+                        <span class="material-symbols-outlined" style="margin-right: 8px;">folder_open</span>
+                        Nuevo Expediente
+                    </button>
+                </a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>FECHA</th>
+                        <th>NUM EXPEDIENTE</th>
+                        <th>TIPO DOCUMENTO</th>
+                        <th>FOLIO</th>
+                        <th>ASUNTO</th>
+                        <th>ARCHIVO</th>
+                        <th>COD SEGURIDAD</th>
+                        <th>ESTADO</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr th:each="documento: ${documento}">
+                        <td>
+                            <span class="material-symbols-outlined">folder_open</span>
+                        </td>
+                        <td th:text="${documento.fecha}"></td>
+                        <td th:text="${documento.numexpediente}"></td>
+                        <td th:text="${documento.tipodoc== '1' ? 'Solicitud' : (documento.tipodoc == '2' ? 'Carta' : (documento.tipodoc == '3' ? 'Oficio' : (documento.tipodoc == '4' ? 'Oficio Multiple' : 'Otros')))}"></td>
+                        <td th:text="${documento.folio}"></td>
+                        <td th:text="${documento.asunto}"></td>
+                        <td> <a th:href="@{/documento/view/{id}(id=${documento.numexpediente})}" 
+                            th:text="${documento.archivo}"></a></td>
+                        <td th:text="${documento.codseguridad}"></td>
+                        <td
+                            th:text="${documento.estado == '1' ? 'En Tramite' : (documento.estado == '2' ? 'Pendiente' : (documento.estado == '3' ? 'Atendido' : 'Denegado'))}">
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <a class="btn btn-primary btn-sm"
+                                th:href="@{/documento/edit(id=${documento.numexpediente})}">Atender</a>
+                            <a class="btn btn-danger btn-sm"
+                                th:href="@{/documento/delete(id=${documento.numexpediente})}"
+                                onclick="return confirm('¿Esta Seguro?')">Borrar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Estilo de Home-->
+        <style>
+            /* Estilo para el contenedor principal */
+            .container {
+                margin-left: 280px;
+                margin-right: 150px;
+                /* Ajuste para que el contenido no se superponga al sidebar */
+                padding-top: 30px;
+            }
+
+            /* Estilo de la tabla */
+            .table {
+                border-collapse: separate;
+                /* Permite bordes separados para aplicar border-radius */
+                border-spacing: 0;
+                /* Elimina el espacio entre celdas para que se vea bien con bordes redondeados */
+                width: 100%;
+                /* Ajusta al ancho del contenedor */
+                border: 1px solid #ddd;
+                /* Define un borde alrededor de toda la tabla */
+                border-radius: 10px;
+                /* Ajusta este valor para cambiar la redondez */
+                overflow: hidden;
+                /* Oculta el contenido que se desborda por las esquinas redondeadas */
+            }
+
+            .table th {
+                background-color: #f8f9fa;
+                /* Color de fondo del encabezado */
+                border-bottom: 1px solid #ddd;
+                /* Borde inferior del encabezado */
+            }
+
+            .table td,
+            .table th {
+                padding: 8px;
+                /* Espaciado interno de las celdas */
+                text-align: left;
+                /* Alineación del texto en las celdas */
+            }
+
+            .table tbody tr {
+                border-top: 1px solid #ddd;
+                /* Borde superior entre filas */
+            }
+
+            .table tbody tr:last-child {
+                border-bottom: 1px solid #ddd;
+                /* Borde inferior en la última fila */
+            }
+
+
+            .table .btn {
+                padding: 5px 10px;
+                font-size: 12px;
+                margin: 0 5px;
+            }
+
+            .btn-primary {
+                background-color: #007bff;
+                color: white !important;
+                /* Fuerza el color blanco para el texto */
+                border: none;
+            }
+
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+            .btn-danger {
+                background-color: #dc3545;
+                color: white !important;
+                border: none;
+            }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+            .table-success {
+                background-color: #d4edda !important;
+            }
+
+            .table-danger {
+                background-color: #f8d7da !important;
+            }
+
+            .table-warning {
+                background-color: #fff3cd !important;
+            }
+
+            /* Estilos adicionales */
+            .text-center {
+                text-align: center;
+            }
+
+            /* Botón nuevo usuario */
+            .btn-primary {
+                margin-bottom: 15px;
+            }
+
+
+            :root {
+                --color-dark: #161616;
+                --color-ocean: #416dea;
+                --color-grass: #3dd28d;
+                --color-snow: #FFFFFF;
+                --color-salmon: #F32C52;
+                --color-sun: #feee7d;
+                --color-alge: #7999a9;
+                --color-flower: #353866;
+                --color-smoke: #e4e4e4;
+
+                --borderRadius: 36px;
+
+                --font-face: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+
+            a,
+            a:visited {
+                text-decoration: none;
+
+                color: var(--color-ocean);
+
+                font-weight: 500;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: var(--color-ocean);
+                }
+            }
+
+            .button {
+                display: flex;
+                overflow: hidden;
+
+                margin: 10px;
+                padding: 12px 12px;
+
+                cursor: pointer;
+                user-select: none;
+                transition: all 150ms linear;
+                text-align: center;
+                white-space: nowrap;
+                text-decoration: none !important;
+                text-transform: none;
+                text-transform: capitalize;
+
+                color: #fff;
+                border: 0 none;
+                border-radius: var(--borderRadius);
+
+                font-size: 13px;
+                font-weight: 500;
+                line-height: 1.3;
+
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+
+                justify-content: center;
+                align-items: center;
+                flex: 0 0 160px;
+
+                box-shadow: 2px 5px 10px var(--color-smoke);
+
+                &:hover {
+                    transition: all 150ms linear;
+
+                    opacity: .85;
+                }
+
+                &:active {
+                    transition: all 150ms linear;
+                    opacity: .75;
+                }
+
+                &:focus {
+                    outline: 1px dotted #959595;
+                    outline-offset: -4px;
+                }
+            }
+
+            .button.-blue {
+                color: var(--color-snow);
+                background: var(--color-ocean);
+            }
+
+            .button span.material-symbols-outlined {
+                margin-right: 8px;
+                /* Ajusta el valor según el espacio deseado */
+            }
+        </style>
+</body>
+
+</html>

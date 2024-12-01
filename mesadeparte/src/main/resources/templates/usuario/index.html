@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="/componentes/head :: head">
+</head>
+
+<body>
+    <div th:replace="/componentes/sidebar :: sidebar"></div>
+    <div class="container my-3" style="user-select: none;">
+
+        <h1 class="text-center mb-3">Lista de Usuarios</h1>
+        <div class="main-container">
+            <div class="button-container" role="group" aria-label="Action Buttons">
+                <button class="button -blue" id="openModalButton">
+                    <span class="material-symbols-outlined" style="margin-right: 8px;">person_add</span>
+                    Nuevo Usuario
+                </button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ID</th>
+                        <th>DNI</th>
+                        <th>APELLIDOS</th>
+                        <th>NOMBRES</th>
+                        <th>CLAVE</th>
+                        <th>TIPO</th>
+                        <th>ESTADO</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr th:each="usuario : ${usuario}"
+                        th:class="${usuario.estado == '1' ? 'table-success' : (usuario.estado == '2' ? 'table-danger' : 'table-warning')}">
+                        <td>
+                            <span class="material-symbols-outlined">person</span>
+                        </td>
+                        <td th:text="${usuario.idusuario}"></td> <!-- Usamos data-id -->
+                        <td th:text="${usuario.dni}"></td>
+                        <td th:text="${usuario.apellidos}"></td>
+                        <td th:text="${usuario.nombres}"></td>
+                        <td th:text="${usuario.clave}"></td>
+                        <td
+                            th:text="${usuario.tipo == 1 ? 'Administrador' : (usuario.tipo == 2 ? 'Usuario' : 'Error de Tipo')}">
+                        </td>
+                        <td
+                            th:text="${usuario.estado == '1' ? 'Activo' : (usuario.estado == '2' ? 'Desactivo' : 'Estado desconocido')}">
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <a class="btn btn-primary btn-sm" href="#"
+                                th:attr="onclick='openEditModal(' + ${usuario.idusuario} + ', \'' + ${usuario.dni} + '\', \'' + ${usuario.apellidos} + '\', \'' + ${usuario.nombres} + '\', \'' + ${usuario.clave} + '\', ' + ${usuario.tipo} + ')'">Editar</a>
+                            <a class="btn btn-danger btn-sm" th:href="@{/usuario/delete(id=${usuario.idusuario})}"
+                                onclick="return confirm('¿Esta Seguro?')">Borrar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Modal para nuevo usuario -->
+        <div>
+            <div id="userModal" class="modal">
+                <div class="modal-overlay"></div>
+                <div class="modal-content">
+                    <h2>Nuevo Usuario</h2>
+                    <form id="userForm" action="/usuario/create" method="POST">
+                        <label for="dni">DNI:</label>
+                        <input type="text" id="dni" name="dni" required maxlength="8" placeholder="Ej. 12345678">
+
+                        <label for="apellidos">Apellidos:</label>
+                        <input type="text" id="apellidos" name="apellidos" required placeholder="Ej. Pérez">
+
+                        <label for="nombres">Nombres:</label>
+                        <input type="text" id="nombres" name="nombres" required placeholder="Ej. Juan">
+
+                        <label for="clave">Clave:</label>
+                        <div class="password-container">
+                            <input type="password" id="clave" name="clave" required placeholder="Ingrese su clave">
+                            <span class="material-symbols-outlined material-icons" id="togglePassword">
+                                visibility
+                            </span>
+                        </div>
+
+                        <label for="tipo">Tipo de Usuario:</label>
+                        <select id="tipo" name="tipo" required>
+                            <option value="1">Administrador</option>
+                            <option value="2">Usuario</option>
+                        </select>
+
+                        <input type="hidden" id="estado" name="estado" value="1">
+
+                        <div class="modal-buttons">
+                            <button type="submit">Guardar</button>
+                            <button type="button" class="close-btn" id="closeModalButton">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                // Restringir la entrada para DNI (solo 8 dígitos numéricos)
+                document.getElementById("dni").addEventListener("input", function (event) {
+                    const value = event.target.value;
+                    if (!/^\d{0,8}$/.test(value)) {
+                        event.target.value = value.slice(0, -1); // Eliminar el último carácter si no es numérico
+                    }
+                });
+
+                // Capitalizar las palabras de los apellidos y nombres
+                function capitalizeWords(event) {
+                    let value = event.target.value;
+                    value = value.replace(/\b\w/g, function (char) {
+                        return char.toUpperCase();
+                    });
+                    event.target.value = value;
+                }
+
+                document.getElementById("apellidos").addEventListener("input", capitalizeWords);
+                document.getElementById("nombres").addEventListener("input", capitalizeWords);
+
+                // Función para mostrar/ocultar la contraseña
+                const togglePassword = document.getElementById("togglePassword");
+                const passwordField = document.getElementById("clave");
+
+                togglePassword.addEventListener("click", function () {
+                    const type = passwordField.type === "password" ? "text" : "password";
+                    passwordField.type = type;
+
+                    // Cambiar el ícono
+                    if (type === "password") {
+                        togglePassword.textContent = "visibility_off"; // Ojo cerrado
+                    } else {
+                        togglePassword.textContent = "visibility"; // Ojo abierto
+                    }
+                });
+            </script>
+
+            <style>
+                .password-container {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .password-container .material-icons {
+                    position: absolute;
+                    right: 10px;
+                    top: 16px;
+                    font-size: 24px;
+                    cursor: pointer;
+                }
+            </style>
+
+
+
+            <style>
+                .password-container {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .password-container .material-icons {
+                    position: absolute;
+                    right: 10px;
+                    top: 16px;
+                    font-size: 24px;
+                    cursor: pointer;
+                }
+
+                /* Estilo para el modal */
+                .modal {
+                    display: none;
+                    /* Oculto por defecto */
+                    position: fixed;
+                    z-index: 1;
+                    left: 0;
+                    top: 4%;
+                    /* Puedes ajustar este valor para mover el modal más arriba */
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                }
+
+                /* Estilo para el contenido del modal */
+                .modal-content {
+                    background-color: white;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border-radius: 10px;
+                    width: 90%;
+                    max-width: 600px;
+                }
+
+                /* Estilo para los campos de entrada (input y select) dentro del modal */
+                form input,
+                form select {
+                    margin-bottom: 15px;
+                    padding: 12px;
+                    font-size: 16px;
+                    width: 100%;
+                    border-radius: 8px;
+                    border: 1px solid #ccc;
+                    box-sizing: border-box;
+                }
+
+                /* Estilo para los botones dentro del formulario */
+                form button {
+                    background-color: #007bff;
+                    color: white;
+                    padding: 12px 20px;
+                    font-size: 16px;
+                    border-radius: 8px;
+                    border: none;
+                    cursor: pointer;
+                    width: 100%;
+                }
+
+                form button:hover {
+                    background-color: #0056b3;
+                }
+
+                /* Estilo para los botones del modal (Guardar y Cerrar) */
+                .modal-buttons {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 10px;
+                }
+
+                .modal-buttons button {
+                    width: 48%;
+                    /* Asegura que ambos botones tengan un tamaño similar */
+                    padding: 12px 20px;
+                    font-size: 16px;
+                    border-radius: 8px;
+                    border: none;
+                    cursor: pointer;
+                }
+
+                .modal-buttons .close-btn {
+                    background-color: red;
+                    /* Color rojo para el botón de cerrar */
+                    color: white;
+                }
+
+                .modal-buttons .close-btn:hover {
+                    background-color: darkred;
+                }
+
+                /* Asegurarnos de que el fondo oscuro cubra toda la pantalla */
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    /* Fondo oscuro semi-transparente */
+                    z-index: -1;
+                    /* Coloca el fondo detrás del modal */
+                }
+            </style>
+            <script>
+                // Obtener elementos
+                const openModalButton = document.getElementById("openModalButton");
+                const modal = document.getElementById("userModal");
+                const closeModalButton = document.getElementById("closeModalButton");
+
+                const openModalButtonedit = document.getElementById("openModalButtonedit");
+                const modaledit = document.getElementById("userModaledit");
+                const closeModalButtonedit = document.getElementById("closeModalButtonedit");
+
+
+                // Abrir modal cuando se haga clic en el botón
+                openModalButton.onclick = function () {
+                    modal.style.display = "block";
+                }
+
+                // Cerrar modal cuando se haga clic en el botón 'Cerrar'
+                closeModalButton.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                // Abrir modal cuando se haga clic en el botón
+                openModalButtonedit.onclick = function () {
+                    modal.style.display = "block";
+                }
+
+                // Cerrar modal cuando se haga clic en el botón 'Cerrar'
+                closeModalButtonedit.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                // Cerrar modal si se hace clic fuera del contenido del modal
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+
+
+            </script>
+
+
+        </div>
+
+        <!-- Modal para Editar Usuario-->
+        <div>
+            <!-- Modal para Editar Usuario -->
+            <div>
+                <div id="userModalEdit" class="modal">
+                    <div class="modal-overlay"></div>
+                    <div class="modal-content">
+                        <h2>Editar Usuario</h2>
+                        <form id="userFormEdit" action="/usuario/edit" method="POST">
+                            <input type="hidden" id="editId" name="id" value="">
+
+                            <label for="editDni">DNI:</label>
+                            <input type="text" id="editDni" name="dni" required maxlength="8"
+                                placeholder="Ej. 12345678">
+
+                            <label for="editApellidos">Apellidos:</label>
+                            <input type="text" id="editApellidos" name="apellidos" required placeholder="Ej. Pérez">
+
+                            <label for="editNombres">Nombres:</label>
+                            <input type="text" id="editNombres" name="nombres" required placeholder="Ej. Juan">
+
+                            <label for="editClave">Clave:</label>
+                            <div class="password-container">
+                                <input type="password" id="editClave" name="clave" required
+                                    placeholder="Ingrese su clave">
+                                <span class="material-symbols-outlined material-icons" id="togglePasswordEdit">
+                                    visibility
+                                </span>
+                            </div>
+
+                            <label for="editTipo">Tipo de Usuario:</label>
+                            <select id="editTipo" name="tipo" required>
+                                <option value="1">Administrador</option>
+                                <option value="2">Usuario</option>
+                            </select>
+
+                            <input type="hidden" id="editEstado" name="estado" value="1">
+
+                            <div class="modal-buttons">
+                                <button type="submit">Guardar</button>
+                                <button type="button" class="close-btn" id="closeModalButtonEdit">Cerrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Restringir entrada a solo números y máximo de 8 caracteres en el campo DNI
+                document.getElementById("editDni").addEventListener("input", function (event) {
+                    const value = event.target.value;
+                    if (!/^\d{0,8}$/.test(value)) {
+                        event.target.value = value.slice(0, -1); // Elimina el último carácter si no es válido
+                    }
+                });
+            
+                // Permitir solo letras y capitalizar las palabras en Apellidos y Nombres
+                function restrictAndCapitalize(event) {
+                    let value = event.target.value;
+                    value = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, ""); // Permitir solo letras y espacios
+                    value = value.replace(/\b\w/g, function (char) {
+                        return char.toUpperCase(); // Capitalizar cada palabra
+                    });
+                    event.target.value = value;
+                }
+            
+                document.getElementById("editApellidos").addEventListener("input", restrictAndCapitalize);
+                document.getElementById("editNombres").addEventListener("input", restrictAndCapitalize);
+            
+                // Mostrar/ocultar la contraseña
+                const togglePasswordEdit = document.getElementById("togglePasswordEdit");
+                const passwordFieldEdit = document.getElementById("editClave");
+            
+                togglePasswordEdit.addEventListener("click", function () {
+                    const type = passwordFieldEdit.type === "password" ? "text" : "password";
+                    passwordFieldEdit.type = type;
+            
+                    togglePasswordEdit.textContent = type === "password" ? "visibility_off" : "visibility";
+                });
+            </script>
+            
+            <script>
+                function openEditModal(id, dni, apellidos, nombres, clave, tipo) {
+                    document.getElementById('editId').value = id;
+                    document.getElementById('editDni').value = dni;
+                    document.getElementById('editApellidos').value = apellidos;
+                    document.getElementById('editNombres').value = nombres;
+                    document.getElementById('editClave').value = clave; // Si deseas mostrar la clave, aunque no es recomendable
+                    document.getElementById('editTipo').value = tipo;
+
+                    const modalEdit = document.getElementById("userModalEdit");
+                    modalEdit.style.display = "block";
+                }
+
+                // Cerrar modal de edición
+                const closeModalButtonEdit = document.getElementById("closeModalButtonEdit");
+                closeModalButtonEdit.onclick = function () {
+                    const modalEdit = document.getElementById("userModalEdit");
+                    modalEdit.style.display = "none";
+                }
+
+                // Cerrar modal si se hace clic fuera del contenido del modal
+                window.onclick = function (event) {
+                    const modalEdit = document.getElementById("userModalEdit");
+                    if (event.target == modalEdit) {
+                        modalEdit.style.display = "none";
+                    }
+                }
+
+            </script>
+        </div>
+
+        <!-- Estilo de Home-->
+        <style>
+            /* Estilo para el contenedor principal */
+            .container {
+                margin-left: 280px;
+                margin-right: 280px;
+                /* Ajuste para que el contenido no se superponga al sidebar */
+                padding-top: 30px;
+            }
+
+            /* Estilo de la tabla */
+            .table {
+                border-collapse: separate;
+                /* Permite bordes separados para aplicar border-radius */
+                border-spacing: 0;
+                /* Elimina el espacio entre celdas para que se vea bien con bordes redondeados */
+                width: 100%;
+                /* Ajusta al ancho del contenedor */
+                border: 1px solid #ddd;
+                /* Define un borde alrededor de toda la tabla */
+                border-radius: 10px;
+                /* Ajusta este valor para cambiar la redondez */
+                overflow: hidden;
+                /* Oculta el contenido que se desborda por las esquinas redondeadas */
+            }
+
+            .table th {
+                background-color: #f8f9fa;
+                /* Color de fondo del encabezado */
+                border-bottom: 1px solid #ddd;
+                /* Borde inferior del encabezado */
+            }
+
+            .table td,
+            .table th {
+                padding: 8px;
+                /* Espaciado interno de las celdas */
+                text-align: left;
+                /* Alineación del texto en las celdas */
+            }
+
+            .table tbody tr {
+                border-top: 1px solid #ddd;
+                /* Borde superior entre filas */
+            }
+
+            .table tbody tr:last-child {
+                border-bottom: 1px solid #ddd;
+                /* Borde inferior en la última fila */
+            }
+
+
+            .table .btn {
+                padding: 5px 10px;
+                font-size: 12px;
+                margin: 0 5px;
+            }
+
+            .btn-primary {
+                background-color: #007bff;
+                color: white !important;
+                /* Fuerza el color blanco para el texto */
+                border: none;
+            }
+
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+            .btn-danger {
+                background-color: #dc3545;
+                color: white !important;
+                border: none;
+            }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+            .table-success {
+                background-color: #d4edda !important;
+            }
+
+            .table-danger {
+                background-color: #f8d7da !important;
+            }
+
+            .table-warning {
+                background-color: #fff3cd !important;
+            }
+
+            /* Estilos adicionales */
+            .text-center {
+                text-align: center;
+            }
+
+            /* Botón nuevo usuario */
+            .btn-primary {
+                margin-bottom: 15px;
+            }
+
+
+            :root {
+                --color-dark: #161616;
+                --color-ocean: #416dea;
+                --color-grass: #3dd28d;
+                --color-snow: #FFFFFF;
+                --color-salmon: #F32C52;
+                --color-sun: #feee7d;
+                --color-alge: #7999a9;
+                --color-flower: #353866;
+                --color-smoke: #e4e4e4;
+
+                --borderRadius: 36px;
+
+                --font-face: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+
+            a,
+            a:visited {
+                text-decoration: none;
+
+                color: var(--color-ocean);
+
+                font-weight: 500;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: var(--color-ocean);
+                }
+            }
+
+            .button {
+                display: flex;
+                overflow: hidden;
+
+                margin: 10px;
+                padding: 12px 12px;
+
+                cursor: pointer;
+                user-select: none;
+                transition: all 150ms linear;
+                text-align: center;
+                white-space: nowrap;
+                text-decoration: none !important;
+                text-transform: none;
+                text-transform: capitalize;
+
+                color: #fff;
+                border: 0 none;
+                border-radius: var(--borderRadius);
+
+                font-size: 13px;
+                font-weight: 500;
+                line-height: 1.3;
+
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+
+                justify-content: center;
+                align-items: center;
+                flex: 0 0 160px;
+
+                box-shadow: 2px 5px 10px var(--color-smoke);
+
+                &:hover {
+                    transition: all 150ms linear;
+
+                    opacity: .85;
+                }
+
+                &:active {
+                    transition: all 150ms linear;
+                    opacity: .75;
+                }
+
+                &:focus {
+                    outline: 1px dotted #959595;
+                    outline-offset: -4px;
+                }
+            }
+
+            .button.-blue {
+                color: var(--color-snow);
+                background: var(--color-ocean);
+            }
+
+            .button span.material-symbols-outlined {
+                margin-right: 8px;
+                /* Ajusta el valor según el espacio deseado */
+            }
+        </style>
+</body>
+
+</html>

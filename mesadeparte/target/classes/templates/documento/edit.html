@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="es">
+
+<head th:replace="/componentes/head :: head"></head>
+<style>
+    /* Estilo para el contenedor del formulario */
+    .custom-form-container {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        width: 60%;
+    }
+
+    .custom-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #333;
+        text-align: center;
+    }
+
+    .custom-label {
+        font-size: 14px;
+        color: #555;
+        display: inline-block;
+    }
+
+    .custom-text {
+        font-size: 14px;
+        color: #333;
+        display: inline-block;
+        margin-left: 5px;
+    }
+
+    .custom-input {
+        width: auto;
+        padding: 5px;
+        margin-left: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .small-input {
+        width: 150px;
+    }
+
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        flex: 1 1 48%;
+        margin-right: 2%;
+    }
+
+    .form-group:last-child {
+        margin-right: 0;
+    }
+
+    .custom-btn {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .custom-btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Línea separadora */
+    .line-separator {
+        border-top: 1px solid #ccc;
+        margin: 20px 0;
+    }
+
+    /* Estilo para la tabla */
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .custom-table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .custom-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+</style>
+
+<style>
+    /* Estilo para el contenedor principal */
+    .main-container {
+        margin-top: 20px;
+    }
+
+    /* Estilo para la tabla */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: #f4f4f4;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    /* Contenedor para el título y el botón */
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        /* Alinea los elementos a los extremos */
+        align-items: center;
+        /* Centra verticalmente el botón y el título */
+        margin-bottom: 10px;
+    }
+
+    /* Estilo para el botón */
+    .custom-btn-2 {
+        padding: 10px 10px;
+        /* Botón más pequeño */
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        font-size: 12px;
+        /* Letra más pequeña */
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .custom-btn-2:hover {
+        background-color: #0056b3;
+    }
+
+    /* Estilo para el título */
+    .table-title {
+        font-size: 20px;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Contenedor para alinear el botón a la derecha */
+    .table-header-3 {
+        display: flex;
+        justify-content: flex-end;
+        /* Alinea el botón a la derecha */
+        margin-bottom: 10px;
+    }
+
+    /* Estilo para el botón rojo */
+    .custom-btn-3 {
+        display: flex;
+        align-items: center;
+        /* Centra verticalmente el texto e ícono */
+        padding: 10px 12px;
+        /* Botón más pequeño */
+        background-color: #ff0000;
+        /* Rojo */
+        color: white;
+        border: none;
+        border-radius: 7px;
+        font-size: 12px;
+        /* Letra más pequeña */
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+    .custom-btn-3:hover {
+        background-color: #cc0000;
+        /* Rojo oscuro al pasar el mouse */
+    }
+
+    /* Estilo del ícono dentro del botón */
+    .custom-btn-3 .material-symbols-outlined {
+        font-size: 16px;
+        /* Tamaño del ícono */
+        margin-right: 5px;
+        /* Espacio entre ícono y texto */
+    }
+
+    /* Modal de agregar seguimiento */
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 60%;
+        border-radius: 10px;
+    }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        float: right;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .modal-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<body>
+    <nav th:replace="/componentes/sidebar :: sidebar"></nav>
+    <div class="custom-form-container">
+        <h2 class="custom-title">Atender Expediente</h2>
+        <form method="post" class="custom-form" enctype="multipart/form-data">
+            <!-- Fila 1: Fecha y Número de Expediente -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fecha" class="custom-label">Fecha:</label>
+                    <label id="fecha" class="custom-text" th:text="${dto.fecha}"></label>
+                </div>
+                <div class="form-group">
+                    <label for="numexpediente" class="custom-label">Número de Expediente:</label>
+                    <label id="numexpediente" class="custom-text" th:text="${dto.numexpediente}"></label>
+                </div>
+            </div>
+
+            <!-- Fila 2: Nombres y Tipo Documento -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombres" class="custom-label">Nombres:</label>
+                    <label id="nombres" class="custom-text" th:text="${dto.nombres}"></label>
+                </div>
+                <div class="form-group">
+                    <label for="tipodoc" class="custom-label">Tipo Documento:</label>
+                    <label id="tipodoc" class="custom-text" th:text="${dto.tipodoc}"></label>
+                </div>
+            </div>
+
+            <!-- Fila 3: Número de Documento y Asunto -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="numdoc" class="custom-label">Número de Documento:</label>
+                    <label id="numdoc" class="custom-text" th:text="${dto.numdoc}"></label>
+                </div>
+                <div class="form-group">
+                    <label for="asunto" class="custom-label">Asunto:</label>
+                    <label id="asunto" class="custom-text" th:text="${dto.asunto}"></label>
+                </div>
+            </div>
+
+            <!-- Fila 4: Folios y Estado (Editable) -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="folio" class="custom-label">Folios:</label>
+                    <label id="folio" class="custom-text" th:text="${dto.folio}"></label>
+                </div>
+                <div class="form-group">
+                    <label for="estado" class="custom-label">Estado:</label>
+                    <select id="estado" name="estado" class="custom-input small-input">
+                        <option value="1" th:selected="${dto.estado == '1'}">En Tramite</option>
+                        <option value="2" th:selected="${dto.estado == '2'}">Pendiente</option>
+                        <option value="3" th:selected="${dto.estado == '3'}">Atendido</option>
+                        <option value="4" th:selected="${dto.estado == '4'}">Denegado</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="custom-btn">Actualizar</button>
+
+
+        </form>
+
+        <!-- Línea separadora -->
+        <div class="line-separator"></div>
+
+        <!-- Botón para abrir el modal -->
+        <div class="table-header-3">
+            <button class="custom-btn-2" id="addFollowUpBtn">Agregar Seguimiento</button>
+        </div>
+
+        <!-- Tabla de Seguimientos -->
+        <h3>Seguimientos</h3>
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Archivo</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="seguimiento, iterStat : ${seguimientos}">
+                    <!-- Número de fila, basado en el índice de la iteración -->
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${seguimiento.fecha}">Fecha</td>
+                    <td th:text="${seguimiento.descripcion}">Descripción</td>
+                    <td>
+                        <a th:href="@{'/uploads/' + ${seguimiento.archivo}}" target="_blank"
+                            th:text="${seguimiento.archivo}"></a>
+                    </td>
+                    <td th:text="${seguimiento.usuario.nombres} + ' ' + ${seguimiento.usuario.apellidos}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(seguimientos)}">
+                    <td colspan="5">No hay seguimientos disponibles.</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Estilo CSS -->
+        <style>
+            .seguimiento-table-container {
+                margin-top: 20px;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
+
+            .seguimiento-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .seguimiento-table th,
+            .seguimiento-table td {
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }
+
+            .seguimiento-table th {
+                background-color: #f0f0f0;
+            }
+
+            .btn {
+                padding: 5px 10px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+        </style>
+
+       
+
+
+    </div>
+
+
+
+
+</body>
+
+</html>
